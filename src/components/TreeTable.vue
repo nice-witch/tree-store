@@ -67,7 +67,7 @@ const addItem = (id: string | number) => {
 }
 
 const deleteItem = (id: string | number) => {
-  treeStory.treeStore.removeItem(id);
+  treeStory.treeStore.removeItem(id)
 }
 
 const getDataPath = ref<GetDataPath>((data) => {
