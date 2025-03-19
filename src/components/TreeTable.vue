@@ -1,11 +1,21 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useTreeStore } from "@/stores/useTreeStore";
-import { AllCommunityModule, ModuleRegistry, GetDataPath } from 'ag-grid-community';
-import {  RowGroupingModule, TreeDataModule} from 'ag-grid-enterprise';
+import { ref, computed, defineProps, watch } from 'vue'
 import { AgGridVue } from "ag-grid-vue3";
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  GetDataPath,
+  ColDef,
+} from 'ag-grid-community';
+import {  RowGroupingModule, TreeDataModule} from 'ag-grid-enterprise';
+import { useTreeStore } from "@/stores/useTreeStore";
+import CellRenderer from "@/components/CellRenderer.vue";
 
 ModuleRegistry.registerModules([AllCommunityModule, RowGroupingModule, TreeDataModule]);
+
+const props = defineProps<{
+  isViewMode: boolean
+}>();
 
 const treeStory = useTreeStore();
 const rowData = computed(() => processData(treeStory.treeStore.getAll()));
@@ -18,35 +28,46 @@ const rowSelection = {
 }
 
 const groupDefaultExpanded = ref(-1);
-const columnDefs = ref([
+const columnDefs = ref<ColDef[]>([
   {
     field: "id",
     headerName: "№",
     lockPosition: 'left',
-    width: 60,
-
   },
   {
     field: "label",
     headerName: "Наименование",
-    width: 440,
-    filterParams: {
-      treeList: true,
-
-    }
+    cellEditor: "SimpleTextEditor",
   },
 ]);
 
-const autoGroupColumnDef = {
+const defaultColDef = ref<ColDef>({
+  flex: 1,
+  editable: false,
+});
+
+const autoGroupColumnDef = ref<ColDef>({
   headerName: 'Категория',
   width: 400,
   field: "category",
-  cellRendererParams: {
-    suppressCount: true,
-  },
+  cellRenderer: CellRenderer,
+  cellRendererParams:(params) => ({
+    data: params.data,
+    addItem: () => addItem(params.data.id),
+    deleteItem: () => deleteItem(params.data.id),
+  }),
   filterParams: {
-    treeList: true
+    treeList: true,
   }
+});
+
+const addItem = (id: string | number) => {
+  // console.log(id)
+  // treeStory.treeStore.addItem(id);
+}
+
+const deleteItem = (id: string | number) => {
+  treeStory.treeStore.removeItem(id);
 }
 
 const getDataPath = ref<GetDataPath>((data) => {
@@ -79,6 +100,7 @@ function processData(data) {
   <AgGridVue
     style="width: 100%; height: 90%"
     :columnDefs="columnDefs"
+    :defaultColDef="defaultColDef"
     :treeData="true"
     :getDataPath="getDataPath"
     :autoGroupColumnDef="autoGroupColumnDef"
@@ -86,5 +108,7 @@ function processData(data) {
     :suppressAggFuncInHeader="true"
     :rowData="rowData"
     :groupDefaultExpanded="groupDefaultExpanded"
+    :undoRedoCellEditing="true"
+    :undoRedoCellEditingLimit="1"
   />
 </template>
