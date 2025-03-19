@@ -31,18 +31,19 @@ const groupDefaultExpanded = ref(-1);
 const columnDefs = ref<ColDef[]>([
   {
     field: "id",
-    headerName: "№",
+    headerName: "№ п/п",
     lockPosition: 'left',
+    flex: 1,
   },
   {
     field: "label",
     headerName: "Наименование",
     cellEditor: "SimpleTextEditor",
+    flex: 4,
   },
 ]);
 
 const defaultColDef = ref<ColDef>({
-  flex: 1,
   editable: false,
 });
 
@@ -58,7 +59,8 @@ const autoGroupColumnDef = ref<ColDef>({
   }),
   filterParams: {
     treeList: true,
-  }
+  },
+  flex: 2,
 });
 
 const addItem = (id: string | number) => {
@@ -97,7 +99,7 @@ function processData(data) {
 
 <template>
   <AgGridVue
-    style="width: 100%; height: 90%"
+    :style="{width: '100%', height: '90%'}"
     :columnDefs="columnDefs"
     :defaultColDef="defaultColDef"
     :treeData="true"
