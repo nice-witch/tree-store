@@ -62,8 +62,7 @@ const autoGroupColumnDef = ref<ColDef>({
 });
 
 const addItem = (id: string | number) => {
-  // console.log(id)
-  // treeStory.treeStore.addItem(id);
+  treeStory.treeStore.addItem({id: rowData.value.length + 1, parent: id, label: `Айтем ${rowData.value.length + 1}`});
 }
 
 const deleteItem = (id: string | number) => {

@@ -62,7 +62,7 @@ export class TreeStore {
   }
 
   addItem(item: TreeNode) {
-    this.items.push(item)
+    this.items.push(item);
   }
 
   removeItem(id: number | string) {
