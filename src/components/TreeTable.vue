@@ -32,6 +32,7 @@ const columnDefs = ref<ColDef[]>([
   {
     field: "id",
     headerName: "№ п/п",
+    valueGetter: hashValueGetter,
     lockPosition: 'left',
     flex: 1,
   },
@@ -43,8 +44,12 @@ const columnDefs = ref<ColDef[]>([
   },
 ]);
 
+function hashValueGetter(params) {
+  return params.node ? Number(params.node.id) + 1 : null;
+}
+
 const defaultColDef = ref<ColDef>({
-  editable: false,
+  editable: true,
 });
 
 const autoGroupColumnDef = ref<ColDef>({
@@ -54,6 +59,7 @@ const autoGroupColumnDef = ref<ColDef>({
   cellRenderer: CellRenderer,
   cellRendererParams:(params) => ({
     data: params.data,
+    isViewMode: props.isViewMode,
     addItem: () => addItem(params.data.id),
     deleteItem: () => deleteItem(params.data.id),
   }),
