@@ -2,13 +2,15 @@
 import { ref } from 'vue';
 import TreeTable from "@/components/TreeTable.vue";
 
-const isViewMode = ref(true)
+const isViewMode = ref(true);
+
+const toggleMode = () => isViewMode.value = !isViewMode.value;
 </script>
 
 <template>
   <div class="wrapper-table">
-    <p class="mode-toggle">{{isViewMode ? 'Режим просмотра' : 'Режим редактирования'}}</p>
-    <TreeTable />
+    <button class="mode-toggle" @click="toggleMode">{{isViewMode ? 'Режим: просмотра' : 'Режим: редактирования'}}</button>
+    <TreeTable :isViewMode="isViewMode"/>
   </div>
 </template>
 
@@ -25,6 +27,7 @@ const isViewMode = ref(true)
   color: blue;
   margin-bottom: 5px;
   cursor: pointer;
+  border: none;
 }
 
 .mode-toggle:hover{
