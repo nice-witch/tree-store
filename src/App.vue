@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import TreeTable from "@/components/TreeTable.vue";
 
-const isViewMode = ref(true);
+const isViewMode = ref(false);
 
 const toggleMode = () => isViewMode.value = !isViewMode.value;
 </script>
