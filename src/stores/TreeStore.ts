@@ -1,10 +1,10 @@
-export interface TreeNode {
+interface TreeNode {
   id: number | string;
   parent: number | string | null;
   label: string;
 }
 
-export default class TreeStore {
+export class TreeStore {
   private items: TreeNode[];
 
   constructor(items: TreeNode[]) {
@@ -26,10 +26,10 @@ export default class TreeStore {
   getAllChildren(id: number | string) {
     let result = [];
 
-    function findChildren(idParent: number | string) {
-      const children = getChildren(idParent);
+    const findChildren = (idParent: number | string) => {
+      const children = this.getChildren(idParent);
       if(children.length) {
-        result.push(getChildren(idParent));
+        result.push(this.getChildren(idParent));
         children.forEach(child =>findChildren(child.id))
       }
     }
@@ -41,15 +41,15 @@ export default class TreeStore {
   getAllParents(id: number | string) {
     let result = [];
 
-    if(!getItem(id).parent) return result;
+    if(!this.getItem(id).parent) return result;
 
-    function findParent(idParent) {
-      const parent = getItem(idParent);
+    const findParent = (idParent) => {
+      const parent = this.getItem(idParent);
       if(parent.parent) {
         result.push(parent);
         findParent(parent.parent)
       } else {
-        result.push(getItem(idParent))
+        result.push(this.getItem(idParent))
       }
     }
 
