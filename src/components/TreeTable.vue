@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, defineProps, watch } from 'vue'
+import { ref, computed, defineProps } from 'vue'
 import { AgGridVue } from "ag-grid-vue3";
 import {
   AllCommunityModule,
@@ -49,7 +49,7 @@ function hashValueGetter(params) {
 }
 
 const defaultColDef = ref<ColDef>({
-  editable: true,
+  editable: props.isViewMode,
 });
 
 const autoGroupColumnDef = ref<ColDef>({
@@ -100,7 +100,6 @@ function processData(data) {
   data.forEach((item) => row(item))
   return flattenedData;
 }
-
 </script>
 
 <template>
