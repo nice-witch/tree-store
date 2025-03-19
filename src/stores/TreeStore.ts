@@ -29,7 +29,7 @@ export class TreeStore {
     const findChildren = (idParent: number | string) => {
       const children = this.getChildren(idParent);
       if(children.length) {
-        result.push(this.getChildren(idParent));
+        children.map(child => result.push(child));
         children.forEach(child =>findChildren(child.id))
       }
     }
@@ -41,10 +41,14 @@ export class TreeStore {
   getAllParents(id: number | string) {
     let result = [];
 
-    if(!this.getItem(id).parent) return result;
+    const item = this.getItem(id);
+    if (!item || !item.parent) return result;
 
     const findParent = (idParent) => {
       const parent = this.getItem(idParent);
+
+      if (!parent) return;
+
       if(parent.parent) {
         result.push(parent);
         findParent(parent.parent)
@@ -62,7 +66,8 @@ export class TreeStore {
   }
 
   removeItem(id: number | string) {
-    this.items = this.items.filter(item => item.id !== id && item.parent !==id);
+    const children = this.getAllChildren(id);
+    this.items = this.items.filter(item => item.id !== id && !children.some((child) => child.id === item.id));
   }
 
   updateItem(item: TreeNode) {
